@@ -24,7 +24,7 @@
     ],
     "homepage": "https://phpgeo.marcusjaschen.de/",
     "type": "library",
-    "license": "GPL",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Marcus Jaschen",
