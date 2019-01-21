@@ -24,6 +24,8 @@ phpgeo provides abstractions to geographical coordinates (including support for 
 
 Minimum required PHP version is 5.4. PHP 5.3 compatibility was dropped with release of version 0.4.
 
+Collection of Google Maps API Web Services for Laravel 5: https://github.com/alexpechkarev/google-maps
+
 ## Documentation
 
 The documentation is available at https://phpgeo.marcusjaschen.de/
