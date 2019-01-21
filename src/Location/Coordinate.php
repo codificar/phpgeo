@@ -169,4 +169,9 @@ class Coordinate implements GeometryInterface
 
         return true;
     }
+
+    public function __toString()
+    {
+        return "{ \"lat\": ".(string) $this->lat.", \"lng\": ".(string) $this->lng."}";
+    }
 }

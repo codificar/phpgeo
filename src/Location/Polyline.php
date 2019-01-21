@@ -28,12 +28,25 @@ class Polyline implements GeometryInterface
      */
     protected $points = [];
 
+    public function popPoint()
+    {
+        return array_pop($this->points);
+    }
+
     /**
      * @param Coordinate $point
      */
     public function addPoint(Coordinate $point)
     {
         $this->points[] = $point;
+    }
+
+    /**
+     * @param Coordinate[] $points
+     */
+    public function addPoints($points)
+    {
+        $this->points = array_merge($this->points, $points);
     }
 
     /**
@@ -120,5 +133,14 @@ class Polyline implements GeometryInterface
         }
 
         return $reversed;
+    }
+
+    public function __toString()
+    {
+        $pts = [];
+        foreach ($this->points as $point) {
+            $pts[] = $point;
+        }
+        return "[".join(",", $pts)."]";
     }
 }

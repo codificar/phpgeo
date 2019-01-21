@@ -36,7 +36,8 @@
         "email" : "mjaschen@gmail.com"
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "alexpechkarev/google-maps": "1.0.9"
     },
     "autoload": {
         "psr-0": {
