@@ -115,12 +115,15 @@ class SimplifySnapToRoad implements SimplifyInterface
 
     private static function getSnappedSegment($path)
     {
-        $curl_string = "https://roads.googleapis.com/v1/snapToRoads?path=" . $path . "&key=" . self::$key . "&interpolate=false";
-        $session = curl_init($curl_string);
-        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
-        $msg_chk = curl_exec($session);
-        $msg_chk = json_decode($msg_chk);
+        $response = \GoogleMaps::load('snapToRoads')
+        ->setparam(
+            [
+                'path' => $path,
+                'interpolate' => false
+            ]
+        )->get();
+
+        $msg_chk = json_decode($response);
 
         $segment = [];
         try {
