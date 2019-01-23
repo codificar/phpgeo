@@ -18,12 +18,15 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
     private $timestamps;
     private $estimatedPoints;
 
-    public function __construct($maxVelocity, $maxDistance, $timestamps)
+    private static $key; // Google maps API key
+
+    public function __construct($maxVelocity, $maxDistance, $timestamps, $key)
     {
         $this->maxVelocity = $maxVelocity;
         $this->maxDistance = $maxDistance;
         $this->timestamps = $timestamps;
         $this->estimatedPoints = [];
+        self::$key = $key;
     }
 
     public function setTimestamps($timestamps)
@@ -158,6 +161,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         $response = \GoogleMaps::load('directions')
         ->setparam(
             [
+                'key' => self::$key,
                 'origin' => ($startLat . "," . $startLng),
                 'destination' => ($destLat . "," . $destLng)
             ]
