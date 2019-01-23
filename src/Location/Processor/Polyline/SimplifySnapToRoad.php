@@ -14,12 +14,10 @@ class SimplifySnapToRoad implements SimplifyInterface
 {
 
     private $estimatedPoints;
-    private static $key;
 
-    public function __construct($estimatedPoints, $key)
+    public function __construct($estimatedPoints)
     {
         $this->estimatedPoints = $estimatedPoints;
-        self::$key = $key;
     }
 
     public function setEstimatedPoints($estimatedPoints)
