@@ -18,15 +18,12 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
     private $timestamps;
     private $estimatedPoints;
 
-    private static $key; // Google maps API key
-
-    public function __construct($maxVelocity, $maxDistance, $timestamps, $key)
+    public function __construct($maxVelocity, $maxDistance, $timestamps)
     {
         $this->maxVelocity = $maxVelocity;
         $this->maxDistance = $maxDistance;
         $this->timestamps = $timestamps;
         $this->estimatedPoints = [];
-        self::$key = $key;
     }
 
     public function setTimestamps($timestamps)
@@ -148,20 +145,11 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         return $points;
     }
 
-    public static function getDirections($startLat, $startLng, $destLat, $destLng) {
-        // $curl_string = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $startLat . "," . $startLng . "&destination=" . $destLat . "," . $destLng . "&key=AIzaSyCftPfltoHQKwVdH_jRneLccwEvyqxgexs" . "&decodePolyline=1";
-
-        // $session = curl_init($curl_string);
-        // curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
-        // $msg_chk = curl_exec($session);
-        // $response = json_decode($msg_chk);
-
-
+    public static function getDirections($startLat, $startLng, $destLat, $destLng)
+    {
         $response = \GoogleMaps::load('directions')
         ->setparam(
             [
-                'key' => self::$key,
                 'origin' => ($startLat . "," . $startLng),
                 'destination' => ($destLat . "," . $destLng)
             ]

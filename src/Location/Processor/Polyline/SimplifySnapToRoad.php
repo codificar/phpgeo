@@ -14,12 +14,9 @@ class SimplifySnapToRoad implements SimplifyInterface
 {
     private $estimatedPoints;
 
-    private static $key; // Google maps API key
-
-    public function __construct($estimatedPoints, $key)
+    public function __construct($estimatedPoints)
     {
         $this->estimatedPoints = $estimatedPoints;
-        self::$key = $key;
     }
 
     public function setEstimatedPoints($estimatedPoints)
@@ -118,7 +115,6 @@ class SimplifySnapToRoad implements SimplifyInterface
         $response = \GoogleMaps::load('snapToRoads')
         ->setparam(
             [
-                'key' => self::$key,
                 'path' => $path,
                 'interpolate' => false
             ]
