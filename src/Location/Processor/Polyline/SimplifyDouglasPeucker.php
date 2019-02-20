@@ -49,13 +49,17 @@ class SimplifyDouglasPeucker implements SimplifyInterface
     public function simplify(Polyline $polyline)
     {
         $resultPolyline = new Polyline();
-        $simplifiedLine = $this->douglasPeucker($polyline->getPoints());
+        if(count($polyline->getPoints()) > 1) {
+            $simplifiedLine = $this->douglasPeucker($polyline->getPoints());
 
-        foreach ($simplifiedLine as $point) {
-            $resultPolyline->addPoint($point);
+            foreach ($simplifiedLine as $point) {
+                $resultPolyline->addPoint($point);
+            }
+
+            return $resultPolyline;
         }
-
-        return $resultPolyline;
+        else
+            return $polyline;
     }
 
     /**
