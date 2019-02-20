@@ -124,7 +124,7 @@ class SimplifySnapToRoad implements SimplifyInterface
 
         $segment = [];
         try {
-            foreach ($msg_chk->snappedPoints as $spoint) {
+            if($msg_chk && isset($msg_chk->snappedPoints)) foreach ($msg_chk->snappedPoints as $spoint) {
                 $segment[] = new Coordinate($spoint->location->latitude, $spoint->location->longitude);
             }
         } catch(Exception $ex) {
