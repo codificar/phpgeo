@@ -52,8 +52,11 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
             if($last_position){
                 // Calcula distancia e velocidade media
                 $distance = $this->distanceGeoPoints($last_position->getLat(), $last_position->getLng(), $point->getLat(), $point->getLng());
-                $velocity = $this->getVelocity($distance, $this->timestamps[$last_i], $this->timestamps[$i]);
-                // dump($i.", ".$distance.", ".$velocity);
+                $velocity = $this->maxVelocity;
+
+                if(array_key_exists($last_i, $this->timestamps) && array_key_exists($i, $this->timestamps))
+                    $velocity = $this->getVelocity($distance, $this->timestamps[$last_i], $this->timestamps[$i]);
+
                 // Velocidade media dentro do limite, nao eh outlier
                 if($distance > 0 && $velocity <= $this->maxVelocity)
                 {
@@ -172,7 +175,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         return $response_array;
     }
 
-    public static function distanceGeoPoints ($lat1, $lng1, $lat2, $lng2) {
+    public function distanceGeoPoints ($lat1, $lng1, $lat2, $lng2) {
 
         $earthRadius = 3958.75;
     
