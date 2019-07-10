@@ -5,6 +5,7 @@ namespace Location\Processor\Polyline;
 use Location\Polyline;
 use Location\Coordinate;
 use DateTime;
+use MapsFactory;
 
 /**
  * Simplifica Polyline descartando anomalias (outliers), e completa as falhas na rota utilizando a API Google Directions.
@@ -127,14 +128,10 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         $resp_directions = array();
         $points = [];
 
-        try {
-            $resp_directions = self::getDirections($initial_point->getLat(), $initial_point->getLng(), $end_point->getLat(), $end_point->getLng());
-        } catch (Exception $e) {
-            $resp_directions['success'] = false;
-        }
+        $resp_directions = self::getDirections($initial_point->getLat(), $initial_point->getLng(), $end_point->getLat(), $end_point->getLng());
 
-        if ($resp_directions['success'] == true) {
-            foreach($resp_directions['data'][0]['overview_polyline']['points'] as $point)
+        if (is_array($resp_directions) && count($resp_directions)) {
+            foreach($resp_directions as $point)
             {
                 $points[] = new Coordinate($point['lat'], $point['lng']);
             }
@@ -149,28 +146,23 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
 
     public static function getDirections($startLat, $startLng, $destLat, $destLng)
     {
-        $response = \GoogleMaps::load('directions')
-        ->setparam(
-            [
-                'origin' => ($startLat . "," . $startLng),
-                'destination' => ($destLat . "," . $destLng)
-            ]
-        )->get();
-
-        $response = json_decode($response, true);
-
+        $factory = new MapsFactory('directions');
+        $clicker = $factory->createMaps();
         $response_array = array();
 
-        if ($response['status'] != "OK"){
-            $response_array['success'] = false;
-            $response_array['message'] = "No results";
-            $response_array['data'] = [];
-
+        try {
+            $polyline = $clicker->getPolylineByDirections($startLat, $startLng, $destLat, $destLng);
+        } catch (Exception $e) {
             return $response_array;
         }
 
-        $response_array['success'] = true;
-        $response_array['data'] = $response['routes'];
+        if(!$polyline)
+            return $response_array;
+
+        $response = json_encode($polyline, JSON_PRETTY_PRINT);
+        $response_array = json_decode($response, true);
+
+        $response_array = $polyline['points'];
 
         return $response_array;
     }
