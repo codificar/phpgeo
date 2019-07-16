@@ -160,9 +160,9 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
             return $response_array;
 
         $response = json_encode($polyline, JSON_PRETTY_PRINT);
-        $response_array = json_decode($response, true);
+        $response = json_decode($response, true);
 
-        $response_array = $polyline['points'];
+        $response_array = $response['points'];
 
         return $response_array;
     }
