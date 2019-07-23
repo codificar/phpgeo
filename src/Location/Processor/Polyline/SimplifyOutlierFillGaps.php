@@ -151,7 +151,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         $response_array = array();
 
         try {
-            $polyline = $clicker->getPolylineAndInfoByDirections($startLat, $startLng, $destLat, $destLng);
+            $polyline = $clicker->getPolylineAndEstimateByDirections($startLat, $startLng, $destLat, $destLng);
         } catch (Exception $e) {
             return $response_array;
         }
