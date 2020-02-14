@@ -18,6 +18,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
     private $maxDistance; // m
     private $timestamps;
     private $estimatedPoints;
+    private $haveFactory = false;
 
     public function __construct($maxVelocity, $maxDistance, $timestamps)
     {
@@ -25,6 +26,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         $this->maxDistance = $maxDistance;
         $this->timestamps = $timestamps;
         $this->estimatedPoints = [];
+        $this->haveFactory = class_exists(MapsFactory::class) ? true : false;
     }
 
     public function setTimestamps($timestamps)
@@ -128,10 +130,15 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
         $resp_directions = array();
         $points = [];
 
-        $resp_directions = self::getDirections($initial_point->getLat(), $initial_point->getLng(), $end_point->getLat(), $end_point->getLng());
+        try {
+            $resp_directions = self::getDirections($initial_point->getLat(), $initial_point->getLng(), $end_point->getLat(), $end_point->getLng());
+        } catch (Exception $e) {
+            $resp_directions = false;
+        }
 
         if (is_array($resp_directions) && count($resp_directions)) {
-            foreach($resp_directions as $point)
+            $respPoints = $this->haveFactory ? $resp_directions : $resp_directions['data'][0]['overview_polyline']['points'];
+            foreach($respPoints as $point)
             {
                 $points[] = new Coordinate($point['lat'], $point['lng']);
             }
@@ -146,6 +153,11 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
 
     public static function getDirections($startLat, $startLng, $destLat, $destLng)
     {
+        if($this->haveFactory){
+
+        }else{
+
+        }
         $factory = new MapsFactory('directions');
         $clicker = $factory->createMaps();
         $response_array = array();
@@ -170,21 +182,20 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
     public function distanceGeoPoints ($lat1, $lng1, $lat2, $lng2) {
 
         $earthRadius = 3958.75;
-    
+
         $dLat = deg2rad($lat2-$lat1);
         $dLng = deg2rad($lng2-$lng1);
-    
-    
+
         $a = sin($dLat/2) * sin($dLat/2) +
            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
            sin($dLng/2) * sin($dLng/2);
         $c = 2 * atan2(sqrt($a), sqrt(1-$a));
         $dist = $earthRadius * $c;
-    
+
         // from miles
         $meterConversion = 1609.34;
         $geopointDistance = $dist * $meterConversion;
-    
+
         return $geopointDistance;
     }
 }
