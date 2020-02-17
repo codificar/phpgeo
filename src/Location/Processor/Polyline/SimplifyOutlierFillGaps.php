@@ -152,6 +152,22 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
 
         try {
             $polyline = $clicker->getPolylineAndEstimateByDirections($startLat, $startLng, $destLat, $destLng);
+
+            if((!is_array($polyline) || !$polyline) && \Settings::getDirectionsRedundancyRule()){
+                $factoryRedundancy = new MapsFactory('redundancy_directions');
+
+                if($factoryRedundancy){
+                    $clickerRedundancy = $factoryRedundancy->createMaps();
+
+                    if($clickerRedundancy)
+                        $polyline = $clickerRedundancy->getPolylineAndEstimateByDirections(
+                            $startLat,
+                            $startLng,
+                            $destLat,
+                            $destLng
+                        );
+                }
+            }
         } catch (Exception $e) {
             return $response_array;
         }
