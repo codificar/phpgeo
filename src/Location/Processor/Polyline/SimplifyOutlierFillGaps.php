@@ -107,7 +107,7 @@ class SimplifyOutlierFillGaps implements SimplifyInterface
 
     public function getVelocity($distance, $timestamp1, $timestamp2)
     {
-        $time = ($timestamp2 - $timestamp1)/1000;
+        $time = ($timestamp2 - $timestamp1);
 
         if($time > 0)
             // m/s
