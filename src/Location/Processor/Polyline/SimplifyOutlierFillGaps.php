@@ -5,7 +5,7 @@ namespace Location\Processor\Polyline;
 use Location\Polyline;
 use Location\Coordinate;
 use DateTime;
-use MapsFactory;
+use Codificar\Geolocation\Lib\MapsFactory;
 
 /**
  * Simplifica Polyline descartando anomalias (outliers), e completa as falhas na rota utilizando a API Google Directions.
